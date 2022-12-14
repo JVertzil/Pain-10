@@ -2405,6 +2405,7 @@ cmdBAR.FontSize = 'Size18'
 cmdBAR.Text = 'Press ; to Execute a Command'
 cmdBAR.TextColor = BrickColor.new(255,255,255)
 
+
 --| Data |--
 
 DATA = Instance.new('Folder', game.ContextActionService)
@@ -2467,11 +2468,35 @@ cmdExit.Position = UDim2.new(0,185,0,0)
 cmdExit.Size = UDim2.new(0,15,0,15)
 cmdExit.Text = ""
 
-cmdExit.MouseButton1Click:Connect(function()
-	print("ur gay")
-	cmdGUI:Destroy()
+ExitScript = Instance.new('LocalScript', cmdExit)
+ExitScript.Source =
+[[
+script.Parent.MouseButton1Down:connect(function()
+	script.Parent.Parent.Parent:Destroy()
 end)
+]]
+cmdMin = Instance.new('TextButton', cmdMAIN)
+cmdMin.Name = 'MM'
+cmdMin.BackgroundColor = BrickColor.new(140,140,140)
+cmdMin.BackgroundTransparency = 0.5
+cmdMin.BorderColor = BrickColor.new(140,140,140)
+cmdMin.BorderSizePixel = 0
+cmdMin.Position = UDim2.new(0,170,0,0)
+cmdMin.Size = UDim2.new(0,15,0,15)
+cmdMin.Text = ""
+MinScript = Instance.new('LocalScript', cmdMin)
+MinScript.Source =
+[[
+local CMDs = script.Parent.Parent.CMDs
 
+script.Parent.MouseButton1Down:connect(function()
+	if CMDs.Visible == true then
+		CMDs.Visible = false
+	elseif CMDs.Visible == false then
+		CMDs.Visible = true
+	end
+end)
+]]
 cmdEx = Instance.new('TextLabel', cmdMAIN)
 cmdEx.Name = 'Example'
 cmdEx.BackgroundColor = BrickColor.new(0,0,0)
@@ -2725,6 +2750,20 @@ local function commands()
 		newcmd.Text = "" .. CMDsV[i].Value
 		cmds.MAIN.CMDs.CanvasSize = UDim2.new(0,0,0, Position + 30)
 	end
+
+	cmds["MAIN"]["Exit"].MouseButton1Click:Connect(function()
+		cmds:Destroy()
+	end)
+
+	local active = true
+	cmds["MAIN"]["MM"].MouseButton1Click:Connect(function()
+		if active == true then
+			cmds["MAIN"]["CMDs"].Visible = false
+		else
+			cmds["MAIN"]["CMDs"].Visible = true
+		end
+		active = not active
+	end)
 end
 
 addcmd('cmds','prints cmds',{},
